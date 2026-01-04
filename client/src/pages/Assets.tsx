@@ -155,7 +155,7 @@ export default function Assets() {
         </div>
 
         {/* Assets Table */}
-        <Card className="glass-panel overflow-hidden">
+        <Card className="glass-panel overflow-hidden rounded-2xl">
           <CardHeader className="border-b border-border/30">
             <CardTitle className="text-lg font-semibold flex items-center gap-2">
               <Wallet className="h-5 w-5 text-primary" /> {t('assets.title')}
@@ -175,7 +175,7 @@ export default function Assets() {
               </TableHeader>
               <TableBody>
                 {assets.map((asset) => (
-                  <TableRow key={asset.symbol} className="border-b border-border/20 hover:bg-muted/30 transition-colors">
+                  <TableRow key={asset.symbol} className="border-b border-border/20 hover:bg-primary/15 transition-colors rounded-xl">
                     <TableCell>
                       <div className="flex items-center gap-3">
                         <div className="h-10 w-10 rounded-xl bg-primary/10 flex items-center justify-center font-bold text-lg">
@@ -326,7 +326,7 @@ export default function Assets() {
                           { time: "2024-03-15 02:00", asset: "ETH", amount: "15.00 ETH", addresses: 45, status: "Completed" },
                           { time: "2024-03-14 02:00", asset: "USDT", amount: "20,000 USDT", addresses: 124, status: "Completed" },
                         ].map((sweep, index) => (
-                          <TableRow key={index} className="hover:bg-muted/30 transition-colors">
+                          <TableRow key={index} className="hover:bg-primary/15 transition-colors rounded-xl">
                             <TableCell className="text-sm text-muted-foreground">{sweep.time}</TableCell>
                             <TableCell className="font-semibold">{sweep.asset}</TableCell>
                             <TableCell className="text-right font-mono">{sweep.amount}</TableCell>
@@ -427,7 +427,7 @@ export default function Assets() {
                   </TableHeader>
                   <TableBody>
                     {depositAddresses.map((addr) => (
-                      <TableRow key={addr.id} className="hover:bg-muted/30 transition-colors">
+                      <TableRow key={addr.id} className="hover:bg-primary/15 transition-colors rounded-xl">
                         <TableCell className="font-semibold">{addr.label}</TableCell>
                         <TableCell className="font-mono text-xs">
                           <div className="flex items-center gap-2">

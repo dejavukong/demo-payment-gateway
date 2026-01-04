@@ -187,7 +187,7 @@ export default function Integration() {
                   Generate New Key
                 </Button>
               </div>
-              <Card className="glass-panel overflow-hidden">
+              <Card className="glass-panel overflow-hidden rounded-2xl">
                 <Table>
                   <TableHeader className="bg-muted/50">
                     <TableRow>
@@ -199,7 +199,7 @@ export default function Integration() {
                     </TableRow>
                   </TableHeader>
                   <TableBody>
-                    <TableRow className="hover:bg-muted/30">
+                    <TableRow className="hover:bg-primary/15">
                       <TableCell className="font-medium">Production Key</TableCell>
                       <TableCell className="font-mono text-muted-foreground text-sm">pk_live_...4a91</TableCell>
                       <TableCell className="text-muted-foreground text-sm">Oct 12, 2023</TableCell>
@@ -219,7 +219,7 @@ export default function Integration() {
                         </div>
                       </TableCell>
                     </TableRow>
-                    <TableRow className="hover:bg-muted/30">
+                    <TableRow className="hover:bg-primary/15">
                       <TableCell className="font-medium">Test Key</TableCell>
                       <TableCell className="font-mono text-muted-foreground text-sm">pk_test_...8b22</TableCell>
                       <TableCell className="text-muted-foreground text-sm">Oct 10, 2023</TableCell>
@@ -344,7 +344,7 @@ export default function Integration() {
                 <h3 className="text-[20px] font-bold">Webhook Deliveries</h3>
                 <Button variant="link" className="text-primary hover:underline">View All Logs</Button>
               </div>
-              <Card className="glass-panel overflow-hidden">
+              <Card className="glass-panel overflow-hidden rounded-2xl">
                 <div className="divide-y divide-border">
                   {/* Log Item */}
                   <div className="flex items-center justify-between p-4 hover:bg-muted/30 transition-colors">

@@ -150,7 +150,7 @@ export default function Invoicing() {
             </div>
 
             {/* Invoices Table */}
-            <Card className="glass-panel overflow-hidden">
+            <Card className="glass-panel overflow-hidden rounded-2xl">
               <CardHeader className="border-b border-border/50">
                 <div className="flex flex-col md:flex-row justify-between gap-4">
                   <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full md:w-auto">
@@ -185,7 +185,7 @@ export default function Invoicing() {
                 </TableHeader>
                 <TableBody>
                   {filteredInvoices.map((invoice) => (
-                    <TableRow key={invoice.id} className="hover:bg-muted/30 transition-colors cursor-pointer" onClick={() => handleViewInvoice(invoice)}>
+                    <TableRow key={invoice.id} className="hover:bg-primary/15 transition-colors cursor-pointer rounded-xl" onClick={() => handleViewInvoice(invoice)}>
                       <TableCell className="font-mono font-medium text-primary">{invoice.id}</TableCell>
                       <TableCell>
                         <div>

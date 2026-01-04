@@ -154,7 +154,7 @@ export default function Wallet() {
 
           {/* Wallets Tab */}
           <TabsContent value="overview" className="space-y-6">
-            <Card className="glass-panel overflow-hidden">
+            <Card className="glass-panel overflow-hidden rounded-2xl">
               <CardHeader className="border-b border-border/50">
                 <div className="flex justify-between items-center">
                   <CardTitle className="text-lg font-semibold">Asset Wallets</CardTitle>
@@ -186,7 +186,7 @@ export default function Wallet() {
                 </TableHeader>
                 <TableBody>
                   {wallets.map((wallet) => (
-                    <TableRow key={wallet.id} className="hover:bg-muted/30 transition-colors">
+                    <TableRow key={wallet.id} className="hover:bg-primary/15 transition-colors rounded-xl">
                       <TableCell>
                         <div className="flex items-center gap-3">
                           <div className="h-10 w-10 rounded-xl bg-primary/10 flex items-center justify-center font-bold text-lg">
@@ -254,7 +254,7 @@ export default function Wallet() {
 
           {/* Addresses Tab */}
           <TabsContent value="addresses" className="space-y-6">
-            <Card className="glass-panel overflow-hidden">
+            <Card className="glass-panel overflow-hidden rounded-2xl">
               <CardHeader className="border-b border-border/50">
                 <div className="flex justify-between items-center">
                   <CardTitle className="text-lg font-semibold">Deposit Addresses</CardTitle>
@@ -277,7 +277,7 @@ export default function Wallet() {
                 </TableHeader>
                 <TableBody>
                   {depositAddresses.map((addr) => (
-                    <TableRow key={addr.id} className="hover:bg-muted/30 transition-colors">
+                    <TableRow key={addr.id} className="hover:bg-primary/15 transition-colors rounded-xl">
                       <TableCell className="font-medium">{addr.label}</TableCell>
                       <TableCell className="font-mono text-xs text-muted-foreground max-w-xs truncate">
                         {addr.address}
@@ -327,7 +327,7 @@ export default function Wallet() {
 
           {/* Transaction History Tab */}
           <TabsContent value="history" className="space-y-6">
-            <Card className="glass-panel overflow-hidden">
+            <Card className="glass-panel overflow-hidden rounded-2xl">
               <CardHeader className="border-b border-border/50">
                 <div className="flex justify-between items-center">
                   <CardTitle className="text-lg font-semibold flex items-center gap-2">
@@ -363,7 +363,7 @@ export default function Wallet() {
                 </TableHeader>
                 <TableBody>
                   {transactions.map((tx) => (
-                    <TableRow key={tx.id} className="hover:bg-muted/30 transition-colors">
+                    <TableRow key={tx.id} className="hover:bg-primary/15 transition-colors rounded-xl">
                       <TableCell>
                         <Badge
                           variant="outline"

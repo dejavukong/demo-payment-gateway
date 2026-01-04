@@ -4,17 +4,24 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { ArrowRight, CheckCircle2, Clock, Download, ExternalLink, Filter, Search, Wallet, AlertCircle, ArrowUpRight, ChevronLeft, BookmarkPlus, Edit, Trash2, Copy, Users, XCircle, Settings, TrendingUp } from "lucide-react";
+import { ArrowRight, CheckCircle2, Clock, Download, ExternalLink, Filter, Search, Wallet, AlertCircle, ArrowUpRight, ChevronLeft, BookmarkPlus, Edit, Trash2, Copy, Users, XCircle, Settings, TrendingUp, RotateCw, Calendar } from "lucide-react";
 import { useState } from "react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 
 const withdrawals = [
   { id: "WTH-8821-001", date: "2024-03-15 10:00", amount: "2.5 ETH", address: "0x71...92A", status: "Completed", txHash: "0x3a...1b2c", network: "Ethereum", approvalStatus: "Approved" },
-  { id: "WTH-8821-002", date: "2024-03-14 18:30", amount: "5,000 USDC", address: "0x8b...3c4d", status: "Processing", txHash: "Pending", network: "Polygon", approvalStatus: "Pending" },
+  { id: "WTH-8821-002", date: "2024-03-14 18:30", amount: "5,000 USDC", address: "0x8b...3c4d", status: "Failed", txHash: "-", network: "Polygon", approvalStatus: "Rejected", failureReason: "Insufficient gas" },
   { id: "WTH-8821-003", date: "2024-03-13 09:15", amount: "0.15 BTC", address: "bc1q...5xyz", status: "Completed", txHash: "a1b2...c3d4", network: "Bitcoin", approvalStatus: "Approved" },
+  { id: "WTH-8821-006", date: "2024-03-12 16:45", amount: "1,200 USDT", address: "0x5f...7e8", status: "Completed", txHash: "0xab...cd9f", network: "Ethereum", approvalStatus: "Approved" },
+];
+
+const pendingWithdrawals = [
+  { id: "WTH-8821-007", amount: "3.5 ETH", status: "under_review", submittedDate: "2024-03-16 14:30", estimatedCompletion: "2024-03-17 10:00", network: "Ethereum" },
+  { id: "WTH-8821-008", amount: "8,000 USDC", status: "not_triggered", nextTriggerDate: "2024-03-18", triggerConditionKey: "minAmountCondition", triggerAmount: "$10,000", network: "Polygon" },
 ];
 
 const savedAddresses = [
@@ -32,7 +39,8 @@ const pendingApprovals = [
 export default function Withdraw() {
   const [view, setView] = useState<'overview' | 'create' | 'details'>('overview');
   const [selectedTx, setSelectedTx] = useState<typeof withdrawals[0] | null>(null);
-  const [activeTab, setActiveTab] = useState('history');
+  const [activeTab, setActiveTab] = useState('pending');
+  const [isLimitSettingsOpen, setIsLimitSettingsOpen] = useState(false);
   const { t } = useLanguage();
 
   const handleViewDetails = (tx: typeof withdrawals[0]) => {
@@ -63,10 +71,15 @@ export default function Withdraw() {
             </p>
           </div>
           {view === 'overview' && (
-            <Button onClick={() => setView('create')} className="gap-2 font-medium shadow-lg shadow-primary/20">
-              <Wallet className="w-4 h-4" />
-              {t('withdraw.newWithdrawal')}
-            </Button>
+            <div className="flex items-center gap-2">
+              <Button variant="outline" size="icon" onClick={() => setIsLimitSettingsOpen(true)} className="h-10 w-10">
+                <Settings className="w-4 h-4" />
+              </Button>
+              <Button onClick={() => setView('create')} className="gap-2 font-medium shadow-lg shadow-primary/20">
+                <Wallet className="w-4 h-4" />
+                {t('withdraw.newWithdrawal')}
+              </Button>
+            </div>
           )}
         </div>
 
@@ -108,6 +121,15 @@ export default function Withdraw() {
             {/* Tabs for different sections */}
             <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
               <TabsList className="w-full justify-start bg-transparent p-1 h-auto gap-2 flex-wrap">
+                <TabsTrigger value="pending" className="backdrop-blur-lg bg-white/30 dark:bg-black/20 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground rounded-2xl px-6 py-3">
+                  <Clock className="w-4 h-4 mr-2" />
+                  {t('withdraw.pendingWithdrawals')}
+                  {pendingWithdrawals.length > 0 && (
+                    <Badge className="ml-2 bg-amber-500/20 text-amber-600 dark:text-amber-400 border-amber-500/30 rounded-full">
+                      {pendingWithdrawals.length}
+                    </Badge>
+                  )}
+                </TabsTrigger>
                 <TabsTrigger value="history" className="backdrop-blur-lg bg-white/30 dark:bg-black/20 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground rounded-2xl px-6 py-3">
                   {t('withdraw.withdrawalHistory')}
                 </TabsTrigger>
@@ -124,15 +146,83 @@ export default function Withdraw() {
                     </Badge>
                   )}
                 </TabsTrigger>
-                <TabsTrigger value="limits" className="backdrop-blur-lg bg-white/30 dark:bg-black/20 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground rounded-2xl px-6 py-3">
-                  <Settings className="w-4 h-4 mr-2" />
-                  {t('withdraw.withdrawalLimits')}
-                </TabsTrigger>
               </TabsList>
+
+              {/* Pending Withdrawals Tab */}
+              <TabsContent value="pending" className="mt-6 space-y-6">
+                <Card className="glass-panel">
+                  <CardHeader className="border-b border-border/50">
+                    <CardTitle className="text-lg font-semibold">{t('withdraw.pendingWithdrawals')}</CardTitle>
+                    <CardDescription>{t('withdraw.pendingAmount')}: $12,850.00</CardDescription>
+                  </CardHeader>
+                  <CardContent className="p-6 space-y-4">
+                    {pendingWithdrawals.map((pending) => (
+                      <div key={pending.id} className="p-4 rounded-xl bg-primary/15 border border-primary/30">
+                        <div className="flex items-start justify-between mb-4">
+                          <div>
+                            <div className="flex items-center gap-3 mb-2">
+                              <h4 className="font-mono font-bold text-lg">{pending.id}</h4>
+                              <Badge className={`rounded-full ${
+                                pending.status === 'under_review'
+                                  ? 'bg-blue-500/10 text-blue-600 dark:text-blue-400 border-blue-500/30'
+                                  : 'bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500/30'
+                              }`}>
+                                {pending.status === 'under_review' ? (
+                                  <>
+                                    <AlertCircle className="w-3 h-3 mr-1" />
+                                    {t('withdraw.underReview')}
+                                  </>
+                                ) : (
+                                  <>
+                                    <Clock className="w-3 h-3 mr-1" />
+                                    {t('withdraw.notTriggered')}
+                                  </>
+                                )}
+                              </Badge>
+                            </div>
+                            <p className="text-sm text-muted-foreground">
+                              {pending.status === 'under_review' ? t('withdraw.riskControl') : t('withdraw.autoTrigger')}
+                            </p>
+                          </div>
+                          <div className="text-right">
+                            <div className="text-2xl font-bold text-foreground">{pending.amount}</div>
+                            <p className="text-xs text-muted-foreground">{pending.network}</p>
+                          </div>
+                        </div>
+
+                        {pending.status === 'under_review' ? (
+                          <div className="p-3 rounded-lg bg-blue-500/5 border border-blue-500/20">
+                            <div className="flex items-center gap-2 text-sm">
+                              <Clock className="w-4 h-4 text-blue-600 dark:text-blue-400" />
+                              <span className="text-muted-foreground">
+                                {t('withdraw.scheduledFor')}: <span className="font-semibold text-foreground">{pending.estimatedCompletion}</span>
+                              </span>
+                            </div>
+                          </div>
+                        ) : (
+                          <div className="p-3 rounded-lg bg-amber-500/5 border border-amber-500/20">
+                            <div className="flex items-start gap-2 text-sm">
+                              <Calendar className="w-4 h-4 text-amber-600 dark:text-amber-400 mt-0.5" />
+                              <div>
+                                <div className="font-semibold text-foreground mb-1">
+                                  {t('withdraw.nextWithdrawal')}: {pending.nextTriggerDate}
+                                </div>
+                                <div className="text-muted-foreground text-xs">
+                                  {t('withdraw.triggerCondition')}: {t(`withdraw.${pending.triggerConditionKey}`)} {pending.triggerAmount}
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    ))}
+                  </CardContent>
+                </Card>
+              </TabsContent>
 
               {/* History Tab */}
               <TabsContent value="history" className="mt-6">
-                <Card className="glass-panel overflow-hidden">
+                <Card className="glass-panel overflow-hidden rounded-2xl">
                   <CardHeader className="border-b border-border/50">
                     <div className="flex flex-col md:flex-row justify-between gap-4">
                       <CardTitle className="text-lg font-semibold">{t('dashboard.transactionHistory')}</CardTitle>
@@ -164,7 +254,7 @@ export default function Withdraw() {
                     </TableHeader>
                     <TableBody>
                       {withdrawals.map((tx) => (
-                        <TableRow key={tx.id} className="hover:bg-muted/30 transition-colors cursor-pointer" onClick={() => handleViewDetails(tx)}>
+                        <TableRow key={tx.id} className="hover:bg-primary/15 transition-colors cursor-pointer rounded-xl" onClick={() => handleViewDetails(tx)}>
                           <TableCell className="font-mono font-medium text-primary">{tx.id}</TableCell>
                           <TableCell className="text-muted-foreground text-sm">{tx.date}</TableCell>
                           <TableCell className="font-mono font-bold">{tx.amount}</TableCell>
@@ -173,16 +263,24 @@ export default function Withdraw() {
                           <TableCell>
                             <span className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-bold ${
                               tx.status === 'Completed' ? 'bg-green-500/10 text-green-600 dark:text-green-400' :
-                              'bg-blue-500/10 text-blue-600 dark:text-blue-400'
+                              'bg-red-500/10 text-red-600 dark:text-red-400'
                             }`}>
-                              {tx.status === 'Completed' ? <CheckCircle2 className="w-3 h-3" /> : <Clock className="w-3 h-3" />}
-                              {tx.status === 'Completed' ? t('status.completed') : t('status.processing')}
+                              {tx.status === 'Completed' ? <CheckCircle2 className="w-3 h-3" /> : <XCircle className="w-3 h-3" />}
+                              {tx.status === 'Completed' ? t('status.completed') : t('status.failed')}
                             </span>
                           </TableCell>
                           <TableCell className="text-right">
-                            <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
-                              <ArrowRight className="w-4 h-4 text-muted-foreground" />
-                            </Button>
+                            <div className="flex items-center justify-end gap-2" onClick={(e) => e.stopPropagation()}>
+                              {tx.status === 'Failed' && (
+                                <Button size="sm" variant="outline" className="gap-2 h-8 text-xs">
+                                  <RotateCw className="w-3 h-3" />
+                                  {t('withdraw.retry')}
+                                </Button>
+                              )}
+                              <Button variant="ghost" size="sm" className="h-8 w-8 p-0" onClick={() => handleViewDetails(tx)}>
+                                <ArrowRight className="w-4 h-4 text-muted-foreground" />
+                              </Button>
+                            </div>
                           </TableCell>
                         </TableRow>
                       ))}
@@ -193,7 +291,7 @@ export default function Withdraw() {
 
               {/* Address Book Tab */}
               <TabsContent value="addressbook" className="mt-6">
-                <Card className="glass-panel">
+                <Card className="glass-panel overflow-hidden rounded-2xl">
                   <CardHeader className="border-b border-border/50">
                     <div className="flex justify-between items-center">
                       <div>
@@ -220,7 +318,7 @@ export default function Withdraw() {
                       </TableHeader>
                       <TableBody>
                         {savedAddresses.map((addr) => (
-                          <TableRow key={addr.id} className="hover:bg-muted/30 transition-colors">
+                          <TableRow key={addr.id} className="hover:bg-primary/15 transition-colors rounded-xl">
                             <TableCell className="font-semibold">{addr.label}</TableCell>
                             <TableCell className="font-mono text-xs">
                               <div className="flex items-center gap-2">
@@ -367,84 +465,6 @@ export default function Withdraw() {
                 </Card>
               </TabsContent>
 
-              {/* Withdrawal Limits Tab */}
-              <TabsContent value="limits" className="mt-6">
-                <Card className="glass-panel">
-                  <CardHeader className="border-b border-border/50">
-                    <div className="flex justify-between items-center">
-                      <div>
-                        <CardTitle className="text-lg font-semibold">{t('withdraw.withdrawalLimitsTitle')}</CardTitle>
-                        <CardDescription className="mt-1">{t('withdraw.manageLimits')}</CardDescription>
-                      </div>
-                      <Button variant="outline" className="gap-2">
-                        <TrendingUp className="w-4 h-4" />
-                        {t('withdraw.requestIncrease')}
-                      </Button>
-                    </div>
-                  </CardHeader>
-                  <CardContent className="p-6 space-y-6">
-                    {/* Daily Limit */}
-                    <div className="space-y-3">
-                      <div className="flex justify-between items-baseline">
-                        <h4 className="font-semibold">{t('withdraw.dailyLimit')}</h4>
-                        <div className="text-sm text-muted-foreground">
-                          <span className="font-bold text-primary text-lg">$18,500</span> / <span>$50,000</span>
-                        </div>
-                      </div>
-                      <Progress value={37} className="h-3" />
-                      <p className="text-xs text-muted-foreground">
-                        $31,500 {t('withdraw.remaining')} {t('withdraw.today')} · {t('withdraw.resetsIn')} 8 hours
-                      </p>
-                    </div>
-
-                    {/* Weekly Limit */}
-                    <div className="space-y-3">
-                      <div className="flex justify-between items-baseline">
-                        <h4 className="font-semibold">{t('withdraw.weeklyLimit')}</h4>
-                        <div className="text-sm text-muted-foreground">
-                          <span className="font-bold text-primary text-lg">$125,200</span> / <span>$250,000</span>
-                        </div>
-                      </div>
-                      <Progress value={50} className="h-3" />
-                      <p className="text-xs text-muted-foreground">
-                        $124,800 {t('withdraw.remaining')} {t('withdraw.thisWeek')} · {t('withdraw.resetsOn')} Monday
-                      </p>
-                    </div>
-
-                    {/* Monthly Limit */}
-                    <div className="space-y-3">
-                      <div className="flex justify-between items-baseline">
-                        <h4 className="font-semibold">{t('withdraw.monthlyLimit')}</h4>
-                        <div className="text-sm text-muted-foreground">
-                          <span className="font-bold text-primary text-lg">$485,000</span> / <span>$1,000,000</span>
-                        </div>
-                      </div>
-                      <Progress value={48.5} className="h-3" />
-                      <p className="text-xs text-muted-foreground">
-                        $515,000 {t('withdraw.remaining')} {t('withdraw.thisMonth')} · {t('withdraw.resetsOn')} April 1st
-                      </p>
-                    </div>
-
-                    <div className="pt-4 border-t border-border/50">
-                      <div className="p-4 rounded-xl bg-blue-500/5 border border-blue-500/20">
-                        <div className="flex gap-3">
-                          <AlertCircle className="w-5 h-5 text-blue-600 dark:text-blue-400 shrink-0 mt-0.5" />
-                          <div>
-                            <h5 className="font-semibold text-sm mb-1">{t('withdraw.needHigherLimits')}</h5>
-                            <p className="text-xs text-muted-foreground mb-3">
-                              {t('withdraw.contactManager')}
-                            </p>
-                            <Button size="sm" variant="outline" className="gap-2">
-                              <TrendingUp className="w-3 h-3" />
-                              {t('withdraw.requestLimitIncrease')}
-                            </Button>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              </TabsContent>
             </Tabs>
           </>
         )}
@@ -580,6 +600,83 @@ export default function Withdraw() {
             </Card>
           </div>
         )}
+
+        {/* Withdrawal Limits Settings Dialog */}
+        <Dialog open={isLimitSettingsOpen} onOpenChange={setIsLimitSettingsOpen}>
+          <DialogContent className="max-w-2xl">
+            <DialogHeader>
+              <DialogTitle className="text-xl font-bold flex items-center gap-2">
+                <Settings className="w-5 h-5" />
+                {t('withdraw.limitSettings')}
+              </DialogTitle>
+              <DialogDescription>
+                {t('withdraw.manageLimits')}
+              </DialogDescription>
+            </DialogHeader>
+
+            <div className="space-y-6 py-4">
+              {/* Daily Limit */}
+              <div className="space-y-3">
+                <div className="flex justify-between items-baseline">
+                  <h4 className="font-semibold">{t('withdraw.dailyLimit')}</h4>
+                  <div className="text-sm text-muted-foreground">
+                    <span className="font-bold text-primary text-lg">$18,500</span> / <span>$50,000</span>
+                  </div>
+                </div>
+                <Progress value={37} className="h-3" />
+                <p className="text-xs text-muted-foreground">
+                  $31,500 {t('withdraw.remaining')} {t('withdraw.today')} · {t('withdraw.resetsIn')} 8 hours
+                </p>
+              </div>
+
+              {/* Weekly Limit */}
+              <div className="space-y-3">
+                <div className="flex justify-between items-baseline">
+                  <h4 className="font-semibold">{t('withdraw.weeklyLimit')}</h4>
+                  <div className="text-sm text-muted-foreground">
+                    <span className="font-bold text-primary text-lg">$125,200</span> / <span>$250,000</span>
+                  </div>
+                </div>
+                <Progress value={50} className="h-3" />
+                <p className="text-xs text-muted-foreground">
+                  $124,800 {t('withdraw.remaining')} {t('withdraw.thisWeek')} · {t('withdraw.resetsOn')} Monday
+                </p>
+              </div>
+
+              {/* Monthly Limit */}
+              <div className="space-y-3">
+                <div className="flex justify-between items-baseline">
+                  <h4 className="font-semibold">{t('withdraw.monthlyLimit')}</h4>
+                  <div className="text-sm text-muted-foreground">
+                    <span className="font-bold text-primary text-lg">$485,000</span> / <span>$1,000,000</span>
+                  </div>
+                </div>
+                <Progress value={48.5} className="h-3" />
+                <p className="text-xs text-muted-foreground">
+                  $515,000 {t('withdraw.remaining')} {t('withdraw.thisMonth')} · {t('withdraw.resetsOn')} April 1st
+                </p>
+              </div>
+
+              <div className="pt-4 border-t border-border/50">
+                <div className="p-4 rounded-xl bg-blue-500/5 border border-blue-500/20">
+                  <div className="flex gap-3">
+                    <AlertCircle className="w-5 h-5 text-blue-600 dark:text-blue-400 shrink-0 mt-0.5" />
+                    <div>
+                      <h5 className="font-semibold text-sm mb-1">{t('withdraw.needHigherLimits')}</h5>
+                      <p className="text-xs text-muted-foreground mb-3">
+                        {t('withdraw.contactManager')}
+                      </p>
+                      <Button size="sm" variant="outline" className="gap-2">
+                        <TrendingUp className="w-3 h-3" />
+                        {t('withdraw.requestLimitIncrease')}
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </DialogContent>
+        </Dialog>
       </div>
     </DashboardLayout>
   );

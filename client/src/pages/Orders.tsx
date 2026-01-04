@@ -493,14 +493,14 @@ export default function Orders() {
                 </TableRow>
               ) : (
                 filteredOrders.map((order) => (
-                  <TableRow key={order.id} className="hover:bg-muted/30 transition-colors">
+                  <TableRow key={order.id} className="hover:bg-primary/15 transition-colors rounded-xl">
                     <TableCell>
                       <Checkbox
                         checked={selectedOrders.includes(order.id)}
                         onCheckedChange={(checked) => handleSelectOrder(order.id, checked as boolean)}
                       />
                     </TableCell>
-                    <TableCell className="font-mono font-medium text-primary">{order.id}</TableCell>
+                    <TableCell className="font-mono font-medium text-foreground">{order.id}</TableCell>
                     <TableCell className="text-muted-foreground text-sm">{order.date}</TableCell>
                     <TableCell className="font-medium">{order.customer}</TableCell>
                     <TableCell className="font-mono">{order.amount}</TableCell>
