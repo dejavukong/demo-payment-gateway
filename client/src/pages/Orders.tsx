@@ -162,7 +162,7 @@ export default function Orders() {
               onClick={() => setShowStatusFlow(!showStatusFlow)}
             >
               <Network className="w-4 h-4" />
-              Status Flow
+              {t('orderFlow.statusFlow')}
             </Button>
             <Button variant="outline" className="gap-2 font-bold">
               <Download className="w-4 h-4" />
@@ -180,7 +180,7 @@ export default function Orders() {
           <Card className="glass-panel">
             <CardHeader>
               <div className="flex items-center justify-between">
-                <CardTitle className="text-lg font-bold">Order Status Flow</CardTitle>
+                <CardTitle className="text-lg font-bold">{t('orderFlow.title')}</CardTitle>
                 <Button variant="ghost" size="icon" onClick={() => setShowStatusFlow(false)}>
                   <X className="w-4 h-4" />
                 </Button>
@@ -193,8 +193,8 @@ export default function Orders() {
                   <div className="w-16 h-16 rounded-full bg-blue-500/20 border-2 border-blue-500 flex items-center justify-center mb-3">
                     <FileText className="w-8 h-8 text-blue-600 dark:text-blue-400" />
                   </div>
-                  <h4 className="font-bold text-sm mb-1">Created</h4>
-                  <p className="text-xs text-muted-foreground text-center">Order initialized</p>
+                  <h4 className="font-bold text-sm mb-1">{t('orderFlow.created')}</h4>
+                  <p className="text-xs text-muted-foreground text-center">{t('orderFlow.orderInitialized')}</p>
                 </div>
 
                 <div className="flex-shrink-0 w-12 h-0.5 bg-gradient-to-r from-blue-500 to-yellow-500 relative">
@@ -206,8 +206,8 @@ export default function Orders() {
                   <div className="w-16 h-16 rounded-full bg-yellow-500/20 border-2 border-yellow-500 flex items-center justify-center mb-3">
                     <DollarSign className="w-8 h-8 text-yellow-600 dark:text-yellow-400" />
                   </div>
-                  <h4 className="font-bold text-sm mb-1">Payment Detected</h4>
-                  <p className="text-xs text-muted-foreground text-center">Transaction found</p>
+                  <h4 className="font-bold text-sm mb-1">{t('orderFlow.paymentDetected')}</h4>
+                  <p className="text-xs text-muted-foreground text-center">{t('orderFlow.transactionFound')}</p>
                 </div>
 
                 <div className="flex-shrink-0 w-12 h-0.5 bg-gradient-to-r from-yellow-500 to-amber-500 relative">
@@ -219,8 +219,8 @@ export default function Orders() {
                   <div className="w-16 h-16 rounded-full bg-amber-500/20 border-2 border-amber-500 flex items-center justify-center mb-3 animate-pulse">
                     <Network className="w-8 h-8 text-amber-600 dark:text-amber-400" />
                   </div>
-                  <h4 className="font-bold text-sm mb-1">Confirming</h4>
-                  <p className="text-xs text-muted-foreground text-center">Awaiting confirmations</p>
+                  <h4 className="font-bold text-sm mb-1">{t('orderFlow.confirming')}</h4>
+                  <p className="text-xs text-muted-foreground text-center">{t('orderFlow.awaitingConfirmations')}</p>
                 </div>
 
                 <div className="flex-shrink-0 w-12 h-0.5 bg-gradient-to-r from-amber-500 to-green-500 relative">
@@ -232,14 +232,14 @@ export default function Orders() {
                   <div className="w-16 h-16 rounded-full bg-green-500/20 border-2 border-green-500 flex items-center justify-center mb-3">
                     <CheckCircle2 className="w-8 h-8 text-green-600 dark:text-green-400" />
                   </div>
-                  <h4 className="font-bold text-sm mb-1">Completed</h4>
-                  <p className="text-xs text-muted-foreground text-center">Order finalized</p>
+                  <h4 className="font-bold text-sm mb-1">{t('orderFlow.completed')}</h4>
+                  <p className="text-xs text-muted-foreground text-center">{t('orderFlow.orderFinalized')}</p>
                 </div>
               </div>
 
               <div className="mt-6 p-4 rounded-xl bg-muted/30 border border-border/50">
-                <h5 className="font-semibold text-sm mb-2">Failed State</h5>
-                <p className="text-xs text-muted-foreground">If payment fails or expires, the order moves to <Badge variant="destructive" className="ml-1 mr-1">Failed</Badge> state. Failed orders can be retried or cancelled.</p>
+                <h5 className="font-semibold text-sm mb-2">{t('orderFlow.failedState')}</h5>
+                <p className="text-xs text-muted-foreground">{t('orderFlow.failedDescription')}</p>
               </div>
             </CardContent>
           </Card>
@@ -251,7 +251,7 @@ export default function Orders() {
             <CardContent className="p-4 flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <Badge className="bg-primary/20 text-primary border-primary/30 rounded-full font-bold">
-                  {selectedOrders.length} selected
+                  {selectedOrders.length} {t('common.selected')}
                 </Badge>
                 <Button
                   variant="ghost"
@@ -259,7 +259,7 @@ export default function Orders() {
                   onClick={() => setSelectedOrders([])}
                   className="gap-2"
                 >
-                  <X className="w-4 h-4" /> Clear
+                  <X className="w-4 h-4" /> {t('common.clear')}
                 </Button>
               </div>
               <div className="flex gap-2">
@@ -269,7 +269,7 @@ export default function Orders() {
                   className="gap-2"
                   onClick={handleBatchExport}
                 >
-                  <Download className="w-4 h-4" /> Export Selected
+                  <Download className="w-4 h-4" /> {t('common.exportSelected')}
                 </Button>
                 <Button
                   variant="outline"
@@ -277,7 +277,7 @@ export default function Orders() {
                   className="gap-2"
                   onClick={handleBatchComplete}
                 >
-                  <CheckCircle2 className="w-4 h-4" /> Mark Complete
+                  <CheckCircle2 className="w-4 h-4" /> {t('common.markComplete')}
                 </Button>
                 <Button
                   variant="outline"
@@ -285,7 +285,7 @@ export default function Orders() {
                   className="gap-2 text-red-600 dark:text-red-400 hover:bg-red-500/10"
                   onClick={handleBatchDelete}
                 >
-                  <Trash2 className="w-4 h-4" /> Delete
+                  <Trash2 className="w-4 h-4" /> {t('action.delete')}
                 </Button>
               </div>
             </CardContent>
@@ -335,7 +335,7 @@ export default function Orders() {
                   className="gap-2"
                 >
                   <Filter className="w-4 h-4" />
-                  Advanced
+                  {t('common.advancedFilters')}
                   {showAdvancedFilters ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
                 </Button>
               </div>
@@ -347,20 +347,20 @@ export default function Orders() {
                 <div className="space-y-2">
                   <label className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
                     <Calendar className="w-3 h-3 inline mr-1" />
-                    Date Range
+                    {t('common.dateRange')}
                   </label>
                   <div className="flex gap-2">
                     <Input
                       type="date"
                       className="bg-background/50 text-sm"
-                      placeholder="From"
+                      placeholder={t('common.from')}
                       value={dateFrom}
                       onChange={(e) => setDateFrom(e.target.value)}
                     />
                     <Input
                       type="date"
                       className="bg-background/50 text-sm"
-                      placeholder="To"
+                      placeholder={t('common.to')}
                       value={dateTo}
                       onChange={(e) => setDateTo(e.target.value)}
                     />
@@ -370,20 +370,20 @@ export default function Orders() {
                 <div className="space-y-2">
                   <label className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
                     <DollarSign className="w-3 h-3 inline mr-1" />
-                    Amount Range
+                    {t('common.amountRange')}
                   </label>
                   <div className="flex gap-2">
                     <Input
                       type="number"
                       className="bg-background/50 text-sm"
-                      placeholder="Min"
+                      placeholder={t('common.min')}
                       value={amountMin}
                       onChange={(e) => setAmountMin(e.target.value)}
                     />
                     <Input
                       type="number"
                       className="bg-background/50 text-sm"
-                      placeholder="Max"
+                      placeholder={t('common.max')}
                       value={amountMax}
                       onChange={(e) => setAmountMax(e.target.value)}
                     />
@@ -393,29 +393,29 @@ export default function Orders() {
                 <div className="space-y-2">
                   <label className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
                     <Network className="w-3 h-3 inline mr-1" />
-                    Network
+                    {t('createOrder.network')}
                   </label>
                   <Select value={networkFilter} onValueChange={setNetworkFilter}>
                     <SelectTrigger className="bg-background/50">
-                      <SelectValue placeholder="All Networks" />
+                      <SelectValue placeholder={t('common.allNetworks')} />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="all">All Networks</SelectItem>
-                      <SelectItem value="ethereum">Ethereum</SelectItem>
-                      <SelectItem value="polygon">Polygon</SelectItem>
-                      <SelectItem value="bsc">BSC</SelectItem>
-                      <SelectItem value="arbitrum">Arbitrum</SelectItem>
+                      <SelectItem value="all">{t('common.allNetworks')}</SelectItem>
+                      <SelectItem value="ethereum">{t('network.ethereum')}</SelectItem>
+                      <SelectItem value="polygon">{t('network.polygon')}</SelectItem>
+                      <SelectItem value="bsc">{t('network.bsc')}</SelectItem>
+                      <SelectItem value="arbitrum">{t('network.arbitrum')}</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
 
                 <div className="space-y-2">
                   <label className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
-                    Customer
+                    {t('orders.customer')}
                   </label>
                   <Input
                     className="bg-background/50"
-                    placeholder="Search by customer..."
+                    placeholder={`${t('common.searchBy')} ${t('orders.customer').toLowerCase()}...`}
                     value={customerFilter}
                     onChange={(e) => setCustomerFilter(e.target.value)}
                   />
@@ -423,14 +423,14 @@ export default function Orders() {
 
                 <div className="space-y-2">
                   <label className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
-                    Cryptocurrency
+                    {t('common.cryptocurrency')}
                   </label>
                   <Select value={currencyFilter} onValueChange={setCurrencyFilter}>
                     <SelectTrigger className="bg-background/50">
-                      <SelectValue placeholder="All Currencies" />
+                      <SelectValue placeholder={t('common.allCurrencies')} />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="all">All Currencies</SelectItem>
+                      <SelectItem value="all">{t('common.allCurrencies')}</SelectItem>
                       <SelectItem value="eth">ETH</SelectItem>
                       <SelectItem value="btc">BTC</SelectItem>
                       <SelectItem value="usdc">USDC</SelectItem>
@@ -441,10 +441,10 @@ export default function Orders() {
 
                 <div className="flex items-end gap-2">
                   <Button variant="outline" className="flex-1" size="sm" onClick={handleClearFilters}>
-                    Clear Filters
+                    {t('common.clearFilters')}
                   </Button>
                   <Button className="flex-1" size="sm" onClick={() => setShowAdvancedFilters(false)}>
-                    Apply Filters
+                    {t('common.applyFilters')}
                   </Button>
                 </div>
               </div>
@@ -478,15 +478,15 @@ export default function Orders() {
                   <TableCell colSpan={8} className="text-center py-12">
                     <div className="flex flex-col items-center gap-2">
                       <Search className="w-12 h-12 text-muted-foreground/50" />
-                      <p className="text-lg font-semibold text-muted-foreground">No orders found</p>
-                      <p className="text-sm text-muted-foreground">Try adjusting your filters</p>
+                      <p className="text-lg font-semibold text-muted-foreground">{t('common.noResultsFound')}</p>
+                      <p className="text-sm text-muted-foreground">{t('common.tryAdjusting')}</p>
                       <Button
                         variant="outline"
                         size="sm"
                         className="mt-2"
                         onClick={handleClearFilters}
                       >
-                        Clear Filters
+                        {t('common.clearFilters')}
                       </Button>
                     </div>
                   </TableCell>

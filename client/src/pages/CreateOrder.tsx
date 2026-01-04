@@ -7,12 +7,14 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { ArrowLeft, CheckCircle2, Copy, Loader2, QrCode } from "lucide-react";
 import { useState } from "react";
 import { Link } from "wouter";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 export default function CreateOrder() {
+  const { t } = useLanguage();
   const [step, setStep] = useState<'form' | 'payment'>('form');
   const [loading, setLoading] = useState(false);
   const [paymentStatus, setPaymentStatus] = useState<'waiting' | 'detecting' | 'confirmed'>('waiting');
-  
+
   const [formData, setFormData] = useState({
     amount: "",
     currency: "USDT",
@@ -45,19 +47,19 @@ export default function CreateOrder() {
             </Button>
           </Link>
           <div>
-            <h2 className="text-3xl font-black uppercase tracking-tight">Create Order</h2>
-            <p className="text-muted-foreground font-mono">Generate a payment link manually</p>
+            <h2 className="text-3xl font-black uppercase tracking-tight">{t('createOrder.title')}</h2>
+            <p className="text-muted-foreground font-mono">{t('createOrder.subtitle')}</p>
           </div>
         </div>
 
         {step === 'form' ? (
           <Card className="brutal-card">
             <CardHeader className="border-b-2 border-black">
-              <CardTitle className="font-black uppercase">Order Details</CardTitle>
+              <CardTitle className="font-black uppercase">{t('createOrder.orderDetails')}</CardTitle>
             </CardHeader>
             <CardContent className="pt-6 space-y-6">
               <div className="space-y-2">
-                <Label className="font-bold font-mono">Amount</Label>
+                <Label className="font-bold font-mono">{t('createOrder.amount')}</Label>
                 <Input 
                   placeholder="0.00" 
                   className="font-mono border-2 border-black rounded-none text-lg"
@@ -68,7 +70,7 @@ export default function CreateOrder() {
 
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <Label className="font-bold font-mono">Currency</Label>
+                  <Label className="font-bold font-mono">{t('createOrder.currency')}</Label>
                   <Select 
                     value={formData.currency}
                     onValueChange={(v) => setFormData({...formData, currency: v})}
@@ -85,7 +87,7 @@ export default function CreateOrder() {
                   </Select>
                 </div>
                 <div className="space-y-2">
-                  <Label className="font-bold font-mono">Network</Label>
+                  <Label className="font-bold font-mono">{t('createOrder.network')}</Label>
                   <Select 
                     value={formData.network}
                     onValueChange={(v) => setFormData({...formData, network: v})}
@@ -94,28 +96,28 @@ export default function CreateOrder() {
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent className="font-mono border-2 border-black rounded-none">
-                      <SelectItem value="TRON">TRON (TRC20)</SelectItem>
-                      <SelectItem value="ETH">Ethereum (ERC20)</SelectItem>
-                      <SelectItem value="BSC">BSC (BEP20)</SelectItem>
+                      <SelectItem value="TRON">{t('network.tronTrc20')}</SelectItem>
+                      <SelectItem value="ETH">{t('network.ethereumErc20')}</SelectItem>
+                      <SelectItem value="BSC">{t('network.bscBep20')}</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
               </div>
 
               <div className="space-y-2">
-                <Label className="font-bold font-mono">Customer Email (Optional)</Label>
+                <Label className="font-bold font-mono">{t('createOrder.customerEmailOptional')}</Label>
                 <Input 
                   placeholder="customer@example.com" 
                   className="font-mono border-2 border-black rounded-none"
                 />
               </div>
 
-              <Button 
+              <Button
                 className="w-full brutal-btn bg-primary text-white hover:bg-primary/90 h-12 text-lg font-bold uppercase"
                 onClick={handleCreate}
                 disabled={loading || !formData.amount}
               >
-                {loading ? <Loader2 className="mr-2 h-5 w-5 animate-spin" /> : "Generate Payment Link"}
+                {loading ? <Loader2 className="mr-2 h-5 w-5 animate-spin" /> : t('createOrder.generateLink')}
               </Button>
             </CardContent>
           </Card>
@@ -123,7 +125,7 @@ export default function CreateOrder() {
           <Card className="brutal-card border-4 border-black shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
             <CardHeader className="border-b-2 border-black bg-accent text-center py-6">
               <CardTitle className="font-black uppercase text-2xl">
-                {paymentStatus === 'confirmed' ? 'Payment Successful' : 'Awaiting Payment'}
+                {paymentStatus === 'confirmed' ? t('createOrder.paymentSuccessful') : t('createOrder.awaitingPayment')}
               </CardTitle>
               <p className="font-mono font-bold mt-2">Order #ORD-2024-005</p>
             </CardHeader>
@@ -134,14 +136,14 @@ export default function CreateOrder() {
                     <CheckCircle2 className="h-12 w-12 text-white" />
                   </div>
                   <div>
-                    <h3 className="text-2xl font-black uppercase">Paid {formData.amount} {formData.currency}</h3>
-                    <p className="font-mono text-muted-foreground mt-2">Transaction confirmed on blockchain</p>
+                    <h3 className="text-2xl font-black uppercase">{t('createOrder.paid')} {formData.amount} {formData.currency}</h3>
+                    <p className="font-mono text-muted-foreground mt-2">{t('createOrder.transactionConfirmed')}</p>
                   </div>
-                  <Button 
+                  <Button
                     className="brutal-btn bg-black text-white hover:bg-gray-800"
                     onClick={() => setStep('form')}
                   >
-                    Create Another Order
+                    {t('createOrder.createAnother')}
                   </Button>
                 </div>
               ) : (
@@ -154,13 +156,13 @@ export default function CreateOrder() {
                       </div>
                     </div>
                     <div className="text-center">
-                      <p className="font-mono text-sm text-muted-foreground mb-1">Scan to pay</p>
+                      <p className="font-mono text-sm text-muted-foreground mb-1">{t('createOrder.scanToPay')}</p>
                       <div className="text-3xl font-black">{formData.amount} {formData.currency}</div>
                     </div>
                   </div>
 
                   <div className="space-y-2">
-                    <Label className="font-bold font-mono text-xs uppercase text-muted-foreground">Payment Address ({formData.network})</Label>
+                    <Label className="font-bold font-mono text-xs uppercase text-muted-foreground">{t('createOrder.paymentAddress')} ({formData.network})</Label>
                     <div className="flex gap-2">
                       <Input 
                         readOnly 
@@ -177,18 +179,18 @@ export default function CreateOrder() {
                     {paymentStatus === 'detecting' ? (
                       <div className="flex items-center justify-center gap-2 font-bold font-mono text-yellow-800">
                         <Loader2 className="h-4 w-4 animate-spin" />
-                        Detecting payment on-chain...
+                        {t('createOrder.detectingPayment')}
                       </div>
                     ) : (
                       <div className="space-y-2">
-                        <div className="font-bold font-mono text-sm">Time Remaining: 14:59</div>
-                        <Button 
-                          variant="ghost" 
-                          size="sm" 
+                        <div className="font-bold font-mono text-sm">{t('createOrder.timeRemaining')}: 14:59</div>
+                        <Button
+                          variant="ghost"
+                          size="sm"
                           className="text-xs underline"
                           onClick={simulatePayment}
                         >
-                          [Simulate Payment Received]
+                          {t('createOrder.simulatePayment')}
                         </Button>
                       </div>
                     )}

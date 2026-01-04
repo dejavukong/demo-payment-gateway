@@ -176,12 +176,12 @@ export default function Wallet() {
               <Table>
                 <TableHeader className="bg-muted/50">
                   <TableRow>
-                    <TableHead className="font-semibold text-xs uppercase tracking-wider">Asset</TableHead>
-                    <TableHead className="font-semibold text-xs uppercase tracking-wider">Network</TableHead>
-                    <TableHead className="font-semibold text-xs uppercase tracking-wider text-right">Balance</TableHead>
-                    <TableHead className="font-semibold text-xs uppercase tracking-wider text-center">Type</TableHead>
-                    <TableHead className="font-semibold text-xs uppercase tracking-wider text-center">Addresses</TableHead>
-                    <TableHead className="text-right font-semibold text-xs uppercase tracking-wider">Actions</TableHead>
+                    <TableHead className="font-semibold text-xs uppercase tracking-wider">{t('assets.asset')}</TableHead>
+                    <TableHead className="font-semibold text-xs uppercase tracking-wider">{t('withdraw.network')}</TableHead>
+                    <TableHead className="font-semibold text-xs uppercase tracking-wider text-right">{t('assets.balance')}</TableHead>
+                    <TableHead className="font-semibold text-xs uppercase tracking-wider text-center">{t('orders.type')}</TableHead>
+                    <TableHead className="font-semibold text-xs uppercase tracking-wider text-center">{t('assets.addresses')}</TableHead>
+                    <TableHead className="text-right font-semibold text-xs uppercase tracking-wider">{t('withdraw.actions')}</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -266,13 +266,13 @@ export default function Wallet() {
               <Table>
                 <TableHeader className="bg-muted/50">
                   <TableRow>
-                    <TableHead className="font-semibold text-xs uppercase tracking-wider">Label</TableHead>
-                    <TableHead className="font-semibold text-xs uppercase tracking-wider">Address</TableHead>
-                    <TableHead className="font-semibold text-xs uppercase tracking-wider">Coin</TableHead>
-                    <TableHead className="font-semibold text-xs uppercase tracking-wider text-right">Balance</TableHead>
-                    <TableHead className="font-semibold text-xs uppercase tracking-wider text-center">Type</TableHead>
-                    <TableHead className="font-semibold text-xs uppercase tracking-wider">Created</TableHead>
-                    <TableHead className="text-right font-semibold text-xs uppercase tracking-wider">Actions</TableHead>
+                    <TableHead className="font-semibold text-xs uppercase tracking-wider">{t('withdraw.label')}</TableHead>
+                    <TableHead className="font-semibold text-xs uppercase tracking-wider">{t('withdraw.address')}</TableHead>
+                    <TableHead className="font-semibold text-xs uppercase tracking-wider">{t('common.coin')}</TableHead>
+                    <TableHead className="font-semibold text-xs uppercase tracking-wider text-right">{t('assets.balance')}</TableHead>
+                    <TableHead className="font-semibold text-xs uppercase tracking-wider text-center">{t('orders.type')}</TableHead>
+                    <TableHead className="font-semibold text-xs uppercase tracking-wider">{t('common.created')}</TableHead>
+                    <TableHead className="text-right font-semibold text-xs uppercase tracking-wider">{t('withdraw.actions')}</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -352,13 +352,13 @@ export default function Wallet() {
               <Table>
                 <TableHeader className="bg-muted/50">
                   <TableRow>
-                    <TableHead className="font-semibold text-xs uppercase tracking-wider">Type</TableHead>
-                    <TableHead className="font-semibold text-xs uppercase tracking-wider">Coin</TableHead>
-                    <TableHead className="font-semibold text-xs uppercase tracking-wider text-right">Amount</TableHead>
-                    <TableHead className="font-semibold text-xs uppercase tracking-wider">From → To</TableHead>
-                    <TableHead className="font-semibold text-xs uppercase tracking-wider">Time</TableHead>
-                    <TableHead className="font-semibold text-xs uppercase tracking-wider text-center">Status</TableHead>
-                    <TableHead className="text-right font-semibold text-xs uppercase tracking-wider">Actions</TableHead>
+                    <TableHead className="font-semibold text-xs uppercase tracking-wider">{t('orders.type')}</TableHead>
+                    <TableHead className="font-semibold text-xs uppercase tracking-wider">{t('common.coin')}</TableHead>
+                    <TableHead className="font-semibold text-xs uppercase tracking-wider text-right">{t('orders.amount')}</TableHead>
+                    <TableHead className="font-semibold text-xs uppercase tracking-wider">{t('common.fromTo')}</TableHead>
+                    <TableHead className="font-semibold text-xs uppercase tracking-wider">{t('common.time')}</TableHead>
+                    <TableHead className="font-semibold text-xs uppercase tracking-wider text-center">{t('assets.status')}</TableHead>
+                    <TableHead className="text-right font-semibold text-xs uppercase tracking-wider">{t('withdraw.actions')}</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>

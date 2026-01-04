@@ -197,12 +197,12 @@ export default function Withdraw() {
                   <CardHeader className="border-b border-border/50">
                     <div className="flex justify-between items-center">
                       <div>
-                        <CardTitle className="text-lg font-semibold">Saved Withdrawal Addresses</CardTitle>
-                        <CardDescription className="mt-1">Manage your frequently used withdrawal addresses</CardDescription>
+                        <CardTitle className="text-lg font-semibold">{t('withdraw.savedAddresses')}</CardTitle>
+                        <CardDescription className="mt-1">{t('withdraw.manageAddresses')}</CardDescription>
                       </div>
                       <Button className="gap-2">
                         <BookmarkPlus className="w-4 h-4" />
-                        Add Address
+                        {t('withdraw.addAddress')}
                       </Button>
                     </div>
                   </CardHeader>
@@ -210,12 +210,12 @@ export default function Withdraw() {
                     <Table>
                       <TableHeader className="bg-muted/50">
                         <TableRow>
-                          <TableHead className="font-semibold text-xs uppercase tracking-wider">Label</TableHead>
-                          <TableHead className="font-semibold text-xs uppercase tracking-wider">Address</TableHead>
-                          <TableHead className="font-semibold text-xs uppercase tracking-wider">Network</TableHead>
-                          <TableHead className="font-semibold text-xs uppercase tracking-wider">Status</TableHead>
-                          <TableHead className="font-semibold text-xs uppercase tracking-wider">Last Used</TableHead>
-                          <TableHead className="text-right font-semibold text-xs uppercase tracking-wider">Actions</TableHead>
+                          <TableHead className="font-semibold text-xs uppercase tracking-wider">{t('withdraw.label')}</TableHead>
+                          <TableHead className="font-semibold text-xs uppercase tracking-wider">{t('withdraw.address')}</TableHead>
+                          <TableHead className="font-semibold text-xs uppercase tracking-wider">{t('withdraw.network')}</TableHead>
+                          <TableHead className="font-semibold text-xs uppercase tracking-wider">{t('assets.status')}</TableHead>
+                          <TableHead className="font-semibold text-xs uppercase tracking-wider">{t('withdraw.lastUsed')}</TableHead>
+                          <TableHead className="text-right font-semibold text-xs uppercase tracking-wider">{t('withdraw.actions')}</TableHead>
                         </TableRow>
                       </TableHeader>
                       <TableBody>
@@ -234,11 +234,11 @@ export default function Withdraw() {
                             <TableCell>
                               {addr.verified ? (
                                 <Badge className="bg-green-500/10 text-green-600 dark:text-green-400 border-green-500/30 rounded-full">
-                                  <CheckCircle2 className="w-3 h-3 mr-1" /> Verified
+                                  <CheckCircle2 className="w-3 h-3 mr-1" /> {t('withdraw.verified')}
                                 </Badge>
                               ) : (
                                 <Badge className="bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500/30 rounded-full">
-                                  <AlertCircle className="w-3 h-3 mr-1" /> Unverified
+                                  <AlertCircle className="w-3 h-3 mr-1" /> {t('withdraw.unverified')}
                                 </Badge>
                               )}
                             </TableCell>
@@ -265,8 +265,8 @@ export default function Withdraw() {
               <TabsContent value="approval" className="mt-6 space-y-6">
                 <Card className="glass-panel">
                   <CardHeader className="border-b border-border/50">
-                    <CardTitle className="text-lg font-semibold">Pending Approvals</CardTitle>
-                    <CardDescription>Withdrawals awaiting approval</CardDescription>
+                    <CardTitle className="text-lg font-semibold">{t('withdraw.pendingApprovals')}</CardTitle>
+                    <CardDescription>{t('withdraw.withdrawalsAwaitingApproval')}</CardDescription>
                   </CardHeader>
                   <CardContent className="p-6 space-y-4">
                     {pendingApprovals.map((approval) => (
@@ -280,7 +280,7 @@ export default function Withdraw() {
                               </Badge>
                             </div>
                             <p className="text-sm text-muted-foreground">
-                              Requested by <span className="font-semibold text-foreground">{approval.requester}</span> on {approval.date}
+                              {t('withdraw.requestedBy')} <span className="font-semibold text-foreground">{approval.requester}</span> {t('withdraw.on')} {approval.date}
                             </p>
                           </div>
                           <div className="text-right">
@@ -311,10 +311,10 @@ export default function Withdraw() {
 
                         <div className="flex justify-end gap-2">
                           <Button variant="outline" size="sm" className="gap-2 text-red-600 dark:text-red-400 hover:bg-red-500/10">
-                            <XCircle className="w-4 h-4" /> Reject
+                            <XCircle className="w-4 h-4" /> {t('withdraw.reject')}
                           </Button>
                           <Button size="sm" className="gap-2">
-                            <CheckCircle2 className="w-4 h-4" /> Approve
+                            <CheckCircle2 className="w-4 h-4" /> {t('withdraw.approve')}
                           </Button>
                         </div>
                       </div>
@@ -324,8 +324,8 @@ export default function Withdraw() {
 
                 <Card className="glass-panel">
                   <CardHeader>
-                    <CardTitle className="text-lg font-semibold">Approval Workflow</CardTitle>
-                    <CardDescription>Multi-level approval requirements</CardDescription>
+                    <CardTitle className="text-lg font-semibold">{t('withdraw.approvalWorkflow')}</CardTitle>
+                    <CardDescription>{t('withdraw.multiLevelApproval')}</CardDescription>
                   </CardHeader>
                   <CardContent className="space-y-4">
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -334,10 +334,10 @@ export default function Withdraw() {
                           <div className="w-8 h-8 rounded-full bg-blue-500/20 text-blue-600 dark:text-blue-400 flex items-center justify-center font-bold">
                             1
                           </div>
-                          <h5 className="font-semibold">Level 1</h5>
+                          <h5 className="font-semibold">{t('withdraw.level')} 1</h5>
                         </div>
                         <p className="text-sm text-muted-foreground">
-                          Amounts under $10,000 require single approval from Finance Manager
+                          {t('withdraw.level1Desc')}
                         </p>
                       </div>
                       <div className="p-4 rounded-xl bg-muted/30 border border-border/50">
@@ -345,10 +345,10 @@ export default function Withdraw() {
                           <div className="w-8 h-8 rounded-full bg-amber-500/20 text-amber-600 dark:text-amber-400 flex items-center justify-center font-bold">
                             2
                           </div>
-                          <h5 className="font-semibold">Level 2</h5>
+                          <h5 className="font-semibold">{t('withdraw.level')} 2</h5>
                         </div>
                         <p className="text-sm text-muted-foreground">
-                          Amounts $10,000-$50,000 require two approvals: Finance Manager + Director
+                          {t('withdraw.level2Desc')}
                         </p>
                       </div>
                       <div className="p-4 rounded-xl bg-muted/30 border border-border/50">
@@ -356,10 +356,10 @@ export default function Withdraw() {
                           <div className="w-8 h-8 rounded-full bg-red-500/20 text-red-600 dark:text-red-400 flex items-center justify-center font-bold">
                             3
                           </div>
-                          <h5 className="font-semibold">Level 3</h5>
+                          <h5 className="font-semibold">{t('withdraw.level')} 3</h5>
                         </div>
                         <p className="text-sm text-muted-foreground">
-                          Amounts over $50,000 require three approvals including CEO
+                          {t('withdraw.level3Desc')}
                         </p>
                       </div>
                     </div>
@@ -373,12 +373,12 @@ export default function Withdraw() {
                   <CardHeader className="border-b border-border/50">
                     <div className="flex justify-between items-center">
                       <div>
-                        <CardTitle className="text-lg font-semibold">Withdrawal Limits</CardTitle>
-                        <CardDescription className="mt-1">Monitor and manage your withdrawal limits</CardDescription>
+                        <CardTitle className="text-lg font-semibold">{t('withdraw.withdrawalLimitsTitle')}</CardTitle>
+                        <CardDescription className="mt-1">{t('withdraw.manageLimits')}</CardDescription>
                       </div>
                       <Button variant="outline" className="gap-2">
                         <TrendingUp className="w-4 h-4" />
-                        Request Increase
+                        {t('withdraw.requestIncrease')}
                       </Button>
                     </div>
                   </CardHeader>
@@ -386,42 +386,42 @@ export default function Withdraw() {
                     {/* Daily Limit */}
                     <div className="space-y-3">
                       <div className="flex justify-between items-baseline">
-                        <h4 className="font-semibold">Daily Limit</h4>
+                        <h4 className="font-semibold">{t('withdraw.dailyLimit')}</h4>
                         <div className="text-sm text-muted-foreground">
                           <span className="font-bold text-primary text-lg">$18,500</span> / <span>$50,000</span>
                         </div>
                       </div>
                       <Progress value={37} className="h-3" />
                       <p className="text-xs text-muted-foreground">
-                        $31,500 remaining today · Resets in 8 hours
+                        $31,500 {t('withdraw.remaining')} {t('withdraw.today')} · {t('withdraw.resetsIn')} 8 hours
                       </p>
                     </div>
 
                     {/* Weekly Limit */}
                     <div className="space-y-3">
                       <div className="flex justify-between items-baseline">
-                        <h4 className="font-semibold">Weekly Limit</h4>
+                        <h4 className="font-semibold">{t('withdraw.weeklyLimit')}</h4>
                         <div className="text-sm text-muted-foreground">
                           <span className="font-bold text-primary text-lg">$125,200</span> / <span>$250,000</span>
                         </div>
                       </div>
                       <Progress value={50} className="h-3" />
                       <p className="text-xs text-muted-foreground">
-                        $124,800 remaining this week · Resets on Monday
+                        $124,800 {t('withdraw.remaining')} {t('withdraw.thisWeek')} · {t('withdraw.resetsOn')} Monday
                       </p>
                     </div>
 
                     {/* Monthly Limit */}
                     <div className="space-y-3">
                       <div className="flex justify-between items-baseline">
-                        <h4 className="font-semibold">Monthly Limit</h4>
+                        <h4 className="font-semibold">{t('withdraw.monthlyLimit')}</h4>
                         <div className="text-sm text-muted-foreground">
                           <span className="font-bold text-primary text-lg">$485,000</span> / <span>$1,000,000</span>
                         </div>
                       </div>
                       <Progress value={48.5} className="h-3" />
                       <p className="text-xs text-muted-foreground">
-                        $515,000 remaining this month · Resets on April 1st
+                        $515,000 {t('withdraw.remaining')} {t('withdraw.thisMonth')} · {t('withdraw.resetsOn')} April 1st
                       </p>
                     </div>
 
@@ -430,13 +430,13 @@ export default function Withdraw() {
                         <div className="flex gap-3">
                           <AlertCircle className="w-5 h-5 text-blue-600 dark:text-blue-400 shrink-0 mt-0.5" />
                           <div>
-                            <h5 className="font-semibold text-sm mb-1">Need higher limits?</h5>
+                            <h5 className="font-semibold text-sm mb-1">{t('withdraw.needHigherLimits')}</h5>
                             <p className="text-xs text-muted-foreground mb-3">
-                              Contact your account manager or submit a limit increase request. Approval typically takes 24-48 hours.
+                              {t('withdraw.contactManager')}
                             </p>
                             <Button size="sm" variant="outline" className="gap-2">
                               <TrendingUp className="w-3 h-3" />
-                              Request Limit Increase
+                              {t('withdraw.requestLimitIncrease')}
                             </Button>
                           </div>
                         </div>

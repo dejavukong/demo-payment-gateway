@@ -14,7 +14,9 @@ import {
   Clock,
   Check,
   Loader2,
-  Circle
+  Circle,
+  FileText,
+  Eye
 } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 
@@ -75,7 +77,7 @@ export default function OrderDetailDialog({ open, onOpenChange, order }: OrderDe
             <div className="flex gap-2">
               <Button variant="outline" size="sm" className="rounded-xl gap-2">
                 <ExternalLink className="w-4 h-4" />
-                Explorer
+                {t('common.explorer')}
               </Button>
               <Button size="sm" className="rounded-xl bg-primary hover:bg-primary/90 gap-2">
                 <Download className="w-4 h-4" />
@@ -100,7 +102,7 @@ export default function OrderDetailDialog({ open, onOpenChange, order }: OrderDe
                 <div>
                   <p className="text-sm text-muted-foreground mb-2">{t('orders.fiatEquivalent')}</p>
                   <div className="text-3xl font-bold">{order.value}</div>
-                  <p className="text-sm text-muted-foreground mt-1">Rate: $3,380 / ETH</p>
+                  <p className="text-sm text-muted-foreground mt-1">{t('common.rate')}: $3,380 / ETH</p>
                 </div>
                 <div className="flex flex-col justify-center">
                   <p className="text-xs text-muted-foreground uppercase tracking-wider mb-2">{t('orders.timeRemaining')}</p>
@@ -126,8 +128,8 @@ export default function OrderDetailDialog({ open, onOpenChange, order }: OrderDe
                         <span className="text-lg">Ξ</span>
                       </div>
                       <div>
-                        <p className="font-semibold">Ethereum Mainnet</p>
-                        <p className="text-sm text-muted-foreground">ERC-20 Token</p>
+                        <p className="font-semibold">{t('network.ethereumMainnet')}</p>
+                        <p className="text-sm text-muted-foreground">{t('network.erc20Token')}</p>
                       </div>
                     </div>
                   </div>
@@ -232,6 +234,77 @@ export default function OrderDetailDialog({ open, onOpenChange, order }: OrderDe
                     <p className="text-sm font-semibold">{t('status.completed')}</p>
                     <p className="text-xs text-muted-foreground">{t('orders.pendingConfirmation')}</p>
                   </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Invoice Overview */}
+            <div className="glass-panel p-6 rounded-2xl">
+              <div className="flex items-center justify-between mb-6">
+                <h3 className="font-semibold flex items-center gap-2">
+                  <FileText className="w-4 h-4" />
+                  {t('invoice.overview')}
+                </h3>
+              </div>
+
+              <div className="space-y-4">
+                {/* Invoice Number */}
+                <div className="flex items-center justify-between p-3 bg-muted/30 rounded-xl">
+                  <div className="flex items-center gap-3">
+                    <div className="w-8 h-8 rounded-lg bg-blue-500/20 flex items-center justify-center">
+                      <FileText className="w-4 h-4 text-blue-600 dark:text-blue-400" />
+                    </div>
+                    <div>
+                      <p className="text-xs text-muted-foreground">{t('invoice.invoiceNumber')}</p>
+                      <p className="font-mono font-semibold text-sm">INV-{order.id.replace('ORD-', '')}</p>
+                    </div>
+                  </div>
+                  <Button size="icon" variant="ghost" className="h-7 w-7" onClick={() => copyToClipboard(`INV-${order.id.replace('ORD-', '')}`)}>
+                    <Copy className="w-3.5 h-3.5" />
+                  </Button>
+                </div>
+
+                {/* Invoice Status & Amount */}
+                <div className="grid grid-cols-2 gap-3">
+                  <div className="p-3 bg-muted/30 rounded-xl">
+                    <p className="text-xs text-muted-foreground mb-1">{t('invoice.invoiceStatus')}</p>
+                    <Badge className="bg-green-500/10 text-green-600 dark:text-green-400 border-green-500/30 rounded-full">
+                      <Check className="w-3 h-3 mr-1" /> {t('invoice.paid')}
+                    </Badge>
+                  </div>
+                  <div className="p-3 bg-muted/30 rounded-xl">
+                    <p className="text-xs text-muted-foreground mb-1">{t('invoice.total')}</p>
+                    <p className="font-bold text-sm">{order.value}</p>
+                  </div>
+                </div>
+
+                {/* Issue Date */}
+                <div className="p-3 bg-muted/30 rounded-xl">
+                  <p className="text-xs text-muted-foreground mb-1">{t('invoice.issueDate')}</p>
+                  <p className="text-sm font-medium">{order.date}</p>
+                </div>
+
+                {/* Customer Info */}
+                <div className="p-3 bg-muted/30 rounded-xl">
+                  <p className="text-xs text-muted-foreground mb-2">{t('invoice.generatedFor')}</p>
+                  <div className="flex items-center gap-2">
+                    <div className="w-6 h-6 rounded-full bg-indigo-500/20 text-indigo-600 dark:text-indigo-400 flex items-center justify-center text-xs font-bold">
+                      {order.customer.substring(0, 2).toUpperCase()}
+                    </div>
+                    <p className="text-sm font-medium">{order.customer}</p>
+                  </div>
+                </div>
+
+                {/* Action Buttons */}
+                <div className="grid grid-cols-2 gap-2 pt-2">
+                  <Button variant="outline" size="sm" className="gap-2">
+                    <Eye className="w-3.5 h-3.5" />
+                    {t('invoice.viewInvoice')}
+                  </Button>
+                  <Button size="sm" className="gap-2 bg-primary hover:bg-primary/90">
+                    <Download className="w-3.5 h-3.5" />
+                    {t('invoice.downloadInvoice')}
+                  </Button>
                 </div>
               </div>
             </div>

@@ -175,12 +175,12 @@ export default function Invoicing() {
               <Table>
                 <TableHeader className="bg-muted/50">
                   <TableRow>
-                    <TableHead className="font-semibold text-xs uppercase tracking-wider">Invoice ID</TableHead>
-                    <TableHead className="font-semibold text-xs uppercase tracking-wider">Customer</TableHead>
-                    <TableHead className="font-semibold text-xs uppercase tracking-wider text-right">Amount</TableHead>
-                    <TableHead className="font-semibold text-xs uppercase tracking-wider">Due Date</TableHead>
-                    <TableHead className="font-semibold text-xs uppercase tracking-wider text-center">Status</TableHead>
-                    <TableHead className="text-right font-semibold text-xs uppercase tracking-wider">Actions</TableHead>
+                    <TableHead className="font-semibold text-xs uppercase tracking-wider">{t('common.invoiceId')}</TableHead>
+                    <TableHead className="font-semibold text-xs uppercase tracking-wider">{t('orders.customer')}</TableHead>
+                    <TableHead className="font-semibold text-xs uppercase tracking-wider text-right">{t('orders.amount')}</TableHead>
+                    <TableHead className="font-semibold text-xs uppercase tracking-wider">{t('common.dueDate')}</TableHead>
+                    <TableHead className="font-semibold text-xs uppercase tracking-wider text-center">{t('assets.status')}</TableHead>
+                    <TableHead className="text-right font-semibold text-xs uppercase tracking-wider">{t('withdraw.actions')}</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>

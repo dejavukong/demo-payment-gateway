@@ -12,6 +12,7 @@ import { useState, useEffect } from "react";
 import { toast } from "sonner";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { Dialog, DialogContent, DialogHeader } from "@/components/ui/dialog";
+import QRCode from "react-qr-code";
 
 export default function Integration() {
   const [showSecret, setShowSecret] = useState(false);
@@ -26,7 +27,76 @@ export default function Integration() {
   const [paymentStatus, setPaymentStatus] = useState<'pending' | 'confirming' | 'completed'>('pending');
   const [timeRemaining, setTimeRemaining] = useState(1200); // 20 minutes in seconds
   const [paymentDialogOpen, setPaymentDialogOpen] = useState(false);
+  const [paymentAddress, setPaymentAddress] = useState('');
   const { t } = useLanguage();
+
+  // Generate unique payment address when dialog opens
+  useEffect(() => {
+    if (paymentDialogOpen && !paymentAddress) {
+      generatePaymentAddress();
+    }
+    // Reset when dialog closes
+    if (!paymentDialogOpen) {
+      setPaymentAddress('');
+      setPaymentStatus('pending');
+      setTimeRemaining(1200);
+    }
+  }, [paymentDialogOpen]);
+
+  // Generate payment address based on network
+  const generatePaymentAddress = () => {
+    let address = '';
+    switch (buttonConfig.network) {
+      case 'Ethereum':
+      case 'Polygon':
+      case 'Arbitrum':
+      case 'Optimism':
+        // Generate Ethereum-style address (0x + 40 hex chars)
+        address = '0x' + Array.from({length: 40}, () =>
+          Math.floor(Math.random() * 16).toString(16)
+        ).join('');
+        break;
+      case 'Tron':
+        // Generate Tron-style address (T + 33 base58 chars)
+        const base58Chars = '123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz';
+        address = 'T' + Array.from({length: 33}, () =>
+          base58Chars[Math.floor(Math.random() * base58Chars.length)]
+        ).join('');
+        break;
+      default:
+        address = '0x71C7656EC7ab88b098defB751B7401B5f6d8976F';
+    }
+    setPaymentAddress(address);
+  };
+
+  // Generate QR code value based on network and token
+  const getQRCodeValue = () => {
+    const amount = parseFloat(buttonConfig.amount);
+
+    switch (buttonConfig.network) {
+      case 'Ethereum':
+      case 'Polygon':
+      case 'Arbitrum':
+      case 'Optimism':
+        // ERC-20 token payment URI
+        if (buttonConfig.token === 'ETH') {
+          return `ethereum:${paymentAddress}?value=${(amount * 1e18).toString()}`;
+        } else {
+          // For ERC-20 tokens like USDC, USDT
+          return `ethereum:${paymentAddress}?value=${amount}&token=${buttonConfig.token}`;
+        }
+      case 'Tron':
+        // Tron payment URI
+        if (buttonConfig.token === 'TRX') {
+          return `tron:${paymentAddress}?amount=${(amount * 1e6).toString()}`;
+        } else {
+          // For TRC-20 tokens like USDT
+          return `tron:${paymentAddress}?amount=${amount}&token=${buttonConfig.token}`;
+        }
+      default:
+        return paymentAddress;
+    }
+  };
 
   // Countdown timer effect
   useEffect(() => {
@@ -425,6 +495,7 @@ export default function Integration() {
                           <SelectItem value="Polygon">Polygon</SelectItem>
                           <SelectItem value="Arbitrum">Arbitrum</SelectItem>
                           <SelectItem value="Optimism">Optimism</SelectItem>
+                          <SelectItem value="Tron">Tron</SelectItem>
                         </SelectContent>
                       </Select>
                     </div>
@@ -788,20 +859,33 @@ export default function Integration() {
 
             {/* Payment Address & QR Code - Centered */}
             <div className="flex flex-col items-center space-y-4">
-              <div className="flex items-center justify-center p-6 bg-white rounded-xl border border-border/30">
-                <QrCode className="w-32 h-32 text-muted-foreground" />
+              <div className="flex items-center justify-center p-6 bg-white dark:bg-slate-50 rounded-xl border border-border/30 shadow-sm">
+                {paymentAddress ? (
+                  <QRCode
+                    value={getQRCodeValue()}
+                    size={140}
+                    level="H"
+                    bgColor="#ffffff"
+                    fgColor="#000000"
+                  />
+                ) : (
+                  <div className="w-[140px] h-[140px] flex items-center justify-center">
+                    <Loader2 className="w-8 h-8 animate-spin text-muted-foreground" />
+                  </div>
+                )}
               </div>
               <div className="w-full">
-                <p className="text-xs text-muted-foreground text-center mb-2">Payment Address</p>
+                <p className="text-xs text-muted-foreground text-center mb-2">Payment Address ({buttonConfig.network})</p>
                 <div className="flex items-center gap-2 p-3 bg-muted/30 border border-border/30 rounded-xl">
                   <span className="font-mono text-xs truncate flex-1 text-center">
-                    0x71C7656EC7ab88b098defB751B7401B5f6d8976F
+                    {paymentAddress || 'Generating...'}
                   </span>
                   <Button
                     size="icon"
                     variant="ghost"
                     className="h-8 w-8 shrink-0"
-                    onClick={() => copyToClipboard('0x71C7656EC7ab88b098defB751B7401B5f6d8976F')}
+                    onClick={() => copyToClipboard(paymentAddress)}
+                    disabled={!paymentAddress}
                   >
                     <Copy className="w-3.5 h-3.5" />
                   </Button>
